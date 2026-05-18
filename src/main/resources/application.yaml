@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ejemplo-spring-boot-mongodb-reactivo
+
+server:
+  port: 8081
