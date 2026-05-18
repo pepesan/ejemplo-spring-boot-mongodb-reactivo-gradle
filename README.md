@@ -4,14 +4,14 @@ Proyecto de ejemplo que demuestra el uso de **Spring Boot** con **MongoDB** en m
 
 ## Tecnologías
 
-| Tecnología | Versión |
-|---|---|
-| Java | 17 |
-| Spring Boot | 4.0.6 |
-| Gradle | 9.4.1 |
-| Spring WebFlux | (gestionado por Spring Boot) |
-| Spring Data MongoDB Reactive | (gestionado por Spring Boot) |
-| Lombok | (gestionado por Spring Boot) |
+| Tecnología                    | Versión                    |
+|-------------------------------|----------------------------|
+| Java                          | 25                         |
+| Spring Boot                   | 4.0.6                      |
+| Gradle                        | 9.4.1                      |
+| Spring WebFlux                | gestionado por Spring Boot |
+| Spring Data MongoDB Reactive  | gestionado por Spring Boot |
+| Lombok                        | gestionado por Spring Boot |
 
 ## Requisitos previos
 
@@ -79,8 +79,63 @@ src/
 
 ## Dependencias principales
 
-- **spring-boot-starter-webflux** — servidor HTTP reactivo con Project Reactor
-- **spring-boot-starter-data-mongodb-reactive** — acceso reactivo a MongoDB
-- **spring-boot-starter-validation** — validación de beans con Jakarta Validation
-- **lombok** — reducción de boilerplate (getters, setters, constructores)
-- **spring-boot-devtools** — recarga automática en desarrollo
+| Dependencia                                  | Uso                                        |
+|----------------------------------------------|--------------------------------------------|
+| spring-boot-starter-webflux                  | Servidor HTTP reactivo con Project Reactor |
+| spring-boot-starter-data-mongodb-reactive    | Acceso reactivo a MongoDB                  |
+| spring-boot-starter-validation               | Validación de beans con Jakarta Validation |
+| lombok                                       | Reducción de boilerplate                   |
+| spring-boot-devtools                         | Recarga automática en desarrollo           |
+
+## API REST — ejemplos con curl
+
+La base URL es `http://localhost:8081/api/persons`.
+
+### Obtener todas las personas
+
+```bash
+curl -s http://localhost:8081/api/persons | jq
+```
+
+### Obtener una persona por ID
+
+```bash
+curl -s http://localhost:8081/api/persons/$ID | jq
+```
+
+### Crear una persona (guarda el ID para el resto de llamadas)
+
+```bash
+ID=$(curl -s -X POST http://localhost:8081/api/persons \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Carlos", "lastName": "Lopez"}' | jq -r '.id')
+echo "ID creado: $ID"
+```
+
+### Actualizar una persona
+
+```bash
+curl -s -X PUT http://localhost:8081/api/persons/$ID \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Carlos", "lastName": "Garcia"}' | jq
+```
+
+### Eliminar una persona
+
+```bash
+curl -s -X DELETE http://localhost:8081/api/persons/$ID | jq
+```
+
+### Buscar personas por nombre (con paginación)
+
+```bash
+curl -s "http://localhost:8081/api/persons/byName/Carlos?page=0&size=10" | jq
+```
+
+### Buscar personas por nombre ordenadas por apellido
+
+```bash
+curl -s "http://localhost:8081/api/persons/byNameResponseEntity/Carlos?page=0&size=10" | jq
+```
+
+> **Nota:** `name` debe tener entre 4 y 20 caracteres. `lastName` es obligatorio.
