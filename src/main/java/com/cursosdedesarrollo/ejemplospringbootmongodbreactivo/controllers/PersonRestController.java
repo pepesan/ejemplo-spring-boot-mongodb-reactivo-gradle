@@ -2,16 +2,15 @@ package com.cursosdedesarrollo.ejemplospringbootmongodbreactivo.controllers;
 
 
 import com.cursosdedesarrollo.ejemplospringbootmongodbreactivo.domain.Person;
+import com.cursosdedesarrollo.ejemplospringbootmongodbreactivo.dto.PersonDTO;
 import com.cursosdedesarrollo.ejemplospringbootmongodbreactivo.repositories.ReactivePersonRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.time.Duration;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 @Slf4j
@@ -50,7 +49,7 @@ public class PersonRestController {
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Person>> updatePersonById(
             @PathVariable(value = "id") String id,
-            @Valid @RequestBody Person person) {
+            @Valid @RequestBody PersonDTO person) {
         return reactiveMongoRepository.findById(id)
                 .flatMap(existingPerson -> {
                     existingPerson.setName(person.getName());

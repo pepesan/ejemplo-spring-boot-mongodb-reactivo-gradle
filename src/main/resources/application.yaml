@@ -1,6 +1,9 @@
 spring:
   application:
     name: ejemplo-spring-boot-mongodb-reactivo
+  mongodb:
 
+    # 1) Sin autenticación (desarrollo local)
+    uri: mongodb://localhost:27017/test
 server:
   port: 8081
